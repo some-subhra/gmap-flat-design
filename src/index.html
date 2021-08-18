@@ -5,16 +5,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="map.css">
+  <link rel="stylesheet" href="./css/map.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <title>gmaps</title>
 </head>
 
 <body>
   <h1>G-map know-how</h1>
-  <div id="map" class="map"></div>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap">
-  </script>
-  <script src="map.js"></script>
+  <div class="gMap-container">
+    <div id="map" class="map"></div>
+    <div id="list" class="list">
+      <ul id="marker_list" class="">
+        <li class='reset hidden' onclick="reset()">Re-centre</li>
+      </ul>
+    </div>
+  </div>
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&libraries=&v=weekly">
+    </script>
+  <script defer src="./js/map.js"></script>
 </body>
 
 </html>
