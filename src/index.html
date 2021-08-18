@@ -5,6 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="./css/map.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -16,12 +20,15 @@
   <div class="gMap-container">
     <div id="map" class="map"></div>
     <div id="list" class="list">
-      <ul id="marker_list" class="">
-        <li class='reset hidden' onclick="reset()">Re-centre</li>
-      </ul>
+      <div class="location-list">
+        <ul id="marker_list" class="list-container"></ul>
+      </div>
+      <span class='reset hidden' onclick="reset()">
+        <i class="material-icons">restore</i>
+      </span>
     </div>
   </div>
-  <script async defer
+  <script async
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&libraries=&v=weekly">
     </script>
   <script defer src="./js/map.js"></script>

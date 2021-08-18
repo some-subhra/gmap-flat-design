@@ -1,9 +1,9 @@
 
 // user defined/ pre-defined list
 const locationList = [
-  { "latlng": [22.6757521,88.0495333], name: "Kolkata", address: "Kolkata, West Bengal", icon: 'asset/lion-logo.png'  },
-  { "latlng": [28.6923329,76.9512639], name: "Delhi", address: "Delhi, India", icon: 'https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png' },
-  { "latlng": [12.95396,77.4908522], name: "Bangalore", address: "Bangaluru, Karnataka, India"}
+  { "latlng": [22.6757521, 88.0495333], name: "Kolkata", address: "Kolkata, West Bengal" },
+  { "latlng": [28.6923329, 76.9512639], name: "Delhi", address: "Delhi, India" },
+  { "latlng": [12.95396, 77.4908522], name: "Bangalore", address: "Bangaluru, Karnataka, India" }
 ];
 
 // map load position
@@ -72,25 +72,28 @@ function initMap() {
 
 }
 
+/*
+
+*/
 function createMarker(map, latlng, list) {
 
   //Creates a marker
   const marker = new google.maps.Marker({
     position: latlng,
     map: map,
-    animation: list ? google.maps.Animation.BOUNCE : google.maps.Animation.DROP, // DROP, BOUNCE
+    animation: google.maps.Animation.DROP, // DROP, BOUNCE
     title: list?.name || latlng.toString(),
     address: list?.address || '',
     location: '',
     // district: list?.district,
     // state: list?.state,
     // country: list?.country || 'India',
-    icon:''
+    // draggable: list ? false : true, 
+    icon: list ? '' : { url: 'asset/custom-location.svg' }
   });
-  if (list?.icon) {
-    marker.icon = { url: list?.icon } // custom image
-  }
   marker.location = marker.getPosition().toString().replace(/[()]/g, '');
+  // marker.addListener('drag', handleDragEvent);
+  // marker.addListener('dragend', handleDragEvent);
 
   // close any opened infoWindow
   if (infoWindow) {
@@ -128,10 +131,10 @@ function updateMarkerAddress(marker, address) {
     // marker.district = splittedAddress[2] || '';
     // marker.country = splittedAddress[3] || 'India';
   }
-  registerEvents(marker);
+  registerEvents(marker, true);
 }
 
-function registerEvents(marker) {
+function registerEvents(marker, isCustomPin) {
 
   // infowindow is there to show more details
   infoWindow = new google.maps.InfoWindow(
@@ -165,15 +168,18 @@ function registerEvents(marker) {
       }
       return element.id === marker.location;
     }).addClass("active");
+
+    const myElement = $("#marker_list li.active");
+    const topPos = myElement.offset().top;
+    $('.location-list')[0].scrollTop = topPos;
   });
 
   // reset map on closing info window
   google.maps.event.addListener(infoWindow, "closeclick", () => {
     reset();
   });
-
   // create the list to be displayed for selection/de-selection
-  createMarkerList(marker);
+  createMarkerList(marker, isCustomPin);
 }
 
 function getInfoWindowContent(marker) {
@@ -192,19 +198,25 @@ function reset() {
   removeListSelection();
 }
 
-function createMarkerList(marker) {
+function createMarkerList(marker, isCustomPin) {
   //Creates a sidebar button
   const ul = document.getElementById("marker_list");
   const li = document.createElement("li");
   li.id = marker.getPosition().toString().replace(/[()]/g, '');
-  $(li).addClass('loc');
+  $(li).addClass(isCustomPin ? 'loc custom' : 'loc');
   li.innerHTML = marker.title;
+  const cross = document.createElement("i");
+  $(cross).addClass('material-icons cross-icon');
+  cross.innerHTML = 'close'
+  cross.addEventListener('click', (event) => {
+    marker.setMap(null);
+    event.currentTarget.parentNode.remove();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    event.preventDefault();
+  })
+  li.appendChild(cross);
   ul.appendChild(li);
-
-  //placing the Reset button at last  
-  const last = $('#marker_list').children().last();
-  const resetButton = $('.reset');
-  $(resetButton).insertAfter(last);
 
   //Trigger a click event to marker when the button is clicked.
   google.maps.event.addDomListener(li, "click", function () {
